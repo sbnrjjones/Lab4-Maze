@@ -5,6 +5,7 @@
 #include "PathfinderInterface.h"
 #include <fstream>
 #include <sstream>
+
 using namespace std;
 
 const int X_SIZE = 5;
@@ -23,10 +24,9 @@ protected:
 	vector<string> path;
 	bool findPath(int maze[X_SIZE][Y_SIZE][Z_SIZE], int x, int y, int z);
 	void wipeMaze();
+	void mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE][Z_SIZE]);
 public:
-	Pathfinder() {
-		wipeMaze();
-	}
+	Pathfinder() {}
 	virtual ~Pathfinder() {}
 
 	//Part 1-----------------------------------------------------------------------------------

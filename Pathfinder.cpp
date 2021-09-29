@@ -1,5 +1,6 @@
 #include "Pathfinder.h"
 
+
 void Pathfinder::wipeMaze() {
 	for (int x = 0; x < X_SIZE; x++) {
 		for(int y = 0; y < Y_SIZE; y++) {
@@ -79,6 +80,7 @@ void Pathfinder::createRandomMaze() {
 *				True if the maze is imported correctly; false otherwise
 */
 bool Pathfinder::importMaze(string file_name) {
+	int tempMaze[X_SIZE][Y_SIZE][Z_SIZE];
 	ifstream file(file_name);
 	cout << endl << file_name << endl;
 	if(file.is_open()) {
@@ -92,19 +94,33 @@ bool Pathfinder::importMaze(string file_name) {
 					ss >> value;
 					cout << value << " ";
 					if (ss.fail()) {
-						wipeMaze();
 						return false;
+					} else if (value == 1 || value == 0) {
+						tempMaze[x][y][z] = value;
 					} else {
-						maze[x][y][z] = value;
+						return false;
 					}
 				}
 			}
 			getline(file, line);
 		}
+		if (tempMaze[0][0][0] != 1 || tempMaze[X_SIZE-1][Y_SIZE-1][Z_SIZE-1] != 1){
+			return false;
+		}
+		mazeCopy(tempMaze, maze);
 		return true;
 	} else {
-		wipeMaze();
 		return false;
+	}
+}
+
+void Pathfinder::mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE][Z_SIZE]) {
+	for (int x = 0; x < X_SIZE; x++) {
+		for(int y = 0; y < Y_SIZE; y++) {
+			for (int z = 0; z < Z_SIZE; z++) {
+				maze2[x][y][z] = maze1[x][y][z];
+			}
+		}
 	}
 }
 //-----------------------------------------------------------------------------------------
