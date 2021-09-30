@@ -33,12 +33,14 @@ string Pathfinder::toString() const {
 				else {
 					ss << "1";
 				}
+				// no space at end of line
 				if (z < Z_SIZE - 1) {
 					ss << " ";
 				}
 			}
 			ss << endl;
 		}
+		// no newline at end of maze
 		if (x < X_SIZE - 1) {
 			ss << endl;
 		}
@@ -164,34 +166,42 @@ void Pathfinder::mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE]
 vector<string> Pathfinder::solveMaze() {
 	path.clear();
 	int tempMaze[X_SIZE][Y_SIZE][Z_SIZE];
-	mazeCopy(maze, tempMaze):
-	if(!findPath(tempMaze, 0, 0, 0)) {
-		path.clear();
+	mazeCopy(maze, tempMaze);
+	stack<string> tempPath;
+	if(findPath(tempMaze, 0, 0, 0, tempPath)) {
+		while (!tempPath.empty()) {
+			path.push_back(tempPath.top());
+			tempPath.pop();
+		}
 	}
 	return path;
 }
 //-----------------------------------------------------------------------------------------
-bool Pathfinder::findPath(int tMaze[][Y_SIZE][Z_SIZE], int x, int y, int z) {
+bool Pathfinder::findPath(int tMaze[][Y_SIZE][Z_SIZE], int x, int y, int z, stack<string>& tPath) {
 	//cell out of bounds or not usable
-	if(x < 0 || y < 0 || z < 0 || x >= X_SIZE || y >= Y_SIZE || z >= Z_SIZE || tMaze[x][y][z] != OPEN) {
+	if(x < 0 || y < 0 || z < 0 || x >= X_SIZE || y >= Y_SIZE || z >= Z_SIZE
+		|| tMaze[x][y][z] != OPEN) {
 		return false;
 	}
+	// cell at exit
 	else if (x == X_SIZE-1 && y == Y_SIZE-1 && z == Z_SIZE-1) {
 		tMaze[x][y][z] = PATH;
-		path.push_back("(" + to_string(x) + ", " + to_string(y) + ", " + to_string(z) + ")");
+		tPath.push("(" + to_string(z) + ", " + to_string(y) + ", " + to_string(x) + ")");
 		return true;
 	}
+	// cell is possible
 	else {
 		tMaze[x][y][z] = PATH;
-		if (findPath(tMaze, x - 1, y, z)
-	        || findPath(tMaze, x + 1, y, z)
-	        || findPath(tMaze, x, y - 1, z)
-	        || findPath(tMaze, x, y + 1, z)
-			|| findPath(tMaze, x, y, z - 1)
-			|| findPath(tMaze, x, y, z + 1) ) {
-	      	path.push_back("(" + to_string(x) + ", " + to_string(y) + ", " + to_string(z) + ")");
+		if (findPath(tMaze, x - 1, y, z, tPath)
+	        || findPath(tMaze, x + 1, y, z, tPath)
+	        || findPath(tMaze, x, y - 1, z, tPath)
+	        || findPath(tMaze, x, y + 1, z, tPath)
+			|| findPath(tMaze, x, y, z - 1, tPath)
+			|| findPath(tMaze, x, y, z + 1, tPath) ) {
+	      	tPath.push("(" + to_string(z) + ", " + to_string(y) + ", " + to_string(x) + ")");
 	      	return true;
 	    }
+		// cell wasn't on path
 	    else {
 	      	tMaze[x][y][z] = USED;  // Dead end.
 	      	return false;

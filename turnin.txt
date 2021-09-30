@@ -353,7 +353,7 @@ toString
 0 0 0 0 0
 1 1 1 1 1
 
-solveMaze Maze has no valid solution
+solveMaze VALID solution given
 importMaze Mazes/Solvable2.txt True
 toString
 1 0 1 1 1
@@ -386,7 +386,7 @@ toString
 0 1 1 1 0
 0 1 1 1 1
 
-solveMaze Maze has no valid solution
+solveMaze VALID solution given
 importMaze Mazes/Solvable3.txt True
 toString
 1 1 1 1 1
@@ -419,7 +419,7 @@ toString
 1 1 1 1 1
 1 1 1 1 1
 
-solveMaze Maze has no valid solution
+solveMaze VALID solution given
 importMaze Mazes/Unsolvable1.txt True
 solveMaze Maze has no valid solution
 importMaze Mazes/Unsolvable2.txt True
