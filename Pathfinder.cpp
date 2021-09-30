@@ -1,15 +1,16 @@
 #include "Pathfinder.h"
 
 
-void Pathfinder::wipeMaze() {
-	for (int x = 0; x < X_SIZE; x++) {
-		for(int y = 0; y < Y_SIZE; y++) {
-			for (int z = 0; z < Z_SIZE; z++) {
-					maze[x][y][z] = 1;
-			}
-		}
-	}
-}
+// void Pathfinder::wipeMaze() {
+// 	for (int x = 0; x < X_SIZE; x++) {
+// 		for(int y = 0; y < Y_SIZE; y++) {
+// 			for (int z = 0; z < Z_SIZE; z++) {
+// 					maze[x][y][z] = 1;
+// 			}
+// 		}
+// 	}
+// 	mazeGen = true;
+// }
 //Part 1-----------------------------------------------------------------------------------
 /*
 * toString
@@ -31,11 +32,17 @@ void Pathfinder::wipeMaze() {
 *				A single string representing the current maze
 */
 string Pathfinder::toString() const {
+
 	stringstream ss;
 	for (int x = 0; x < X_SIZE; x++) {
 		for(int y = 0; y < Y_SIZE; y++) {
 			for (int z = 0; z < Z_SIZE; z++) {
-				ss << maze[x][y][z];
+				if (mazeGen){
+					ss << maze[x][y][z];
+				}
+				else {
+					ss << "1";
+				}
 				if (z < Z_SIZE - 1) {
 					ss << " ";
 				}
@@ -87,7 +94,9 @@ bool Pathfinder::importMaze(string file_name) {
 		string line;
 		for (int x = 0; x < X_SIZE; x++) {
 			for(int y = 0; y < Y_SIZE; y++) {
-				getline(file, line);
+				if (!getline(file, line)){
+					return false;
+				}
 				stringstream ss(line);
 				for (int z = 0; z < Z_SIZE; z++) {
 					int value;
@@ -104,10 +113,14 @@ bool Pathfinder::importMaze(string file_name) {
 			}
 			getline(file, line);
 		}
+		if (getline(file, line)) {
+			return false;
+		}
 		if (tempMaze[0][0][0] != 1 || tempMaze[X_SIZE-1][Y_SIZE-1][Z_SIZE-1] != 1){
 			return false;
 		}
 		mazeCopy(tempMaze, maze);
+		mazeGen = true;
 		return true;
 	} else {
 		return false;

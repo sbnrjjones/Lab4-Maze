@@ -23,8 +23,9 @@ protected:
 	int maze[X_SIZE][Y_SIZE][Z_SIZE];
 	vector<string> path;
 	bool findPath(int maze[X_SIZE][Y_SIZE][Z_SIZE], int x, int y, int z);
-	void wipeMaze();
+	// void wipeMaze();
 	void mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE][Z_SIZE]);
+	bool mazeGen = false;
 public:
 	Pathfinder() {}
 	virtual ~Pathfinder() {}
