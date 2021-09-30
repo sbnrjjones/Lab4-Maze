@@ -1,16 +1,5 @@
 #include "Pathfinder.h"
 
-
-// void Pathfinder::wipeMaze() {
-// 	for (int x = 0; x < X_SIZE; x++) {
-// 		for(int y = 0; y < Y_SIZE; y++) {
-// 			for (int z = 0; z < Z_SIZE; z++) {
-// 					maze[x][y][z] = 1;
-// 			}
-// 		}
-// 	}
-// 	mazeGen = true;
-// }
 //Part 1-----------------------------------------------------------------------------------
 /*
 * toString
@@ -40,6 +29,7 @@ string Pathfinder::toString() const {
 				if (mazeGen){
 					ss << maze[x][y][z];
 				}
+				// if maze has not been imported or generated
 				else {
 					ss << "1";
 				}
@@ -94,6 +84,7 @@ bool Pathfinder::importMaze(string file_name) {
 		string line;
 		for (int x = 0; x < X_SIZE; x++) {
 			for(int y = 0; y < Y_SIZE; y++) {
+				// not enough inputs
 				if (!getline(file, line)){
 					return false;
 				}
@@ -102,23 +93,28 @@ bool Pathfinder::importMaze(string file_name) {
 					int value;
 					ss >> value;
 					cout << value << " ";
+					// non-integer value
 					if (ss.fail()) {
 						return false;
 					} else if (value == 1 || value == 0) {
 						tempMaze[x][y][z] = value;
 					} else {
+						// values other than 1 and 0
 						return false;
 					}
 				}
 			}
 			getline(file, line);
 		}
-		if (getline(file, line)) {
+		//too many inputs
+		if (getline(file, line)) { 
 			return false;
 		}
+		//missing entry or exit
 		if (tempMaze[0][0][0] != 1 || tempMaze[X_SIZE-1][Y_SIZE-1][Z_SIZE-1] != 1){
 			return false;
 		}
+		//only overwrite existing maze if successfully imported
 		mazeCopy(tempMaze, maze);
 		mazeGen = true;
 		return true;
