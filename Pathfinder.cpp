@@ -57,7 +57,16 @@ string Pathfinder::toString() const {
 * solvable or unsolvable, and this method should be able to produce both kinds of mazes.
 */
 void Pathfinder::createRandomMaze() {
-
+	for (int x = 0; x < X_SIZE; x++) {
+		for(int y = 0; y < Y_SIZE; y++) {
+			for (int z = 0; z < Z_SIZE; z++) {
+				maze[x][y][z] = rand() % 2;
+			}
+		}
+	}
+	maze[0][0][0] = 1;
+	maze[X_SIZE-1][Y_SIZE-1][Z_SIZE-1] = 1;
+	mazeGen = true;
 }
 //-----------------------------------------------------------------------------------------
 
@@ -92,7 +101,6 @@ bool Pathfinder::importMaze(string file_name) {
 				for (int z = 0; z < Z_SIZE; z++) {
 					int value;
 					ss >> value;
-					cout << value << " ";
 					// non-integer value
 					if (ss.fail()) {
 						return false;
@@ -153,7 +161,10 @@ void Pathfinder::mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE]
 *				A solution to the current maze, or an empty vector if none exists
 */
 vector<string> Pathfinder::solveMaze() {
-	findPath(maze, 0, 0, 0);
+	path.clear();
+	if(!findPath(maze, 0, 0, 0)) {
+		path.clear();
+	}
 	return path;
 }
 //-----------------------------------------------------------------------------------------

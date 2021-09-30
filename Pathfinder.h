@@ -26,7 +26,7 @@ protected:
 	void mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE][Z_SIZE]);
 	bool mazeGen = false;
 public:
-	Pathfinder() {}
+	Pathfinder() { srand(time(NULL)); }
 	virtual ~Pathfinder() {}
 
 	//Part 1-----------------------------------------------------------------------------------
