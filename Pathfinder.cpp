@@ -64,6 +64,7 @@ void Pathfinder::createRandomMaze() {
 			}
 		}
 	}
+	// ensure entry and exit available
 	maze[0][0][0] = 1;
 	maze[X_SIZE-1][Y_SIZE-1][Z_SIZE-1] = 1;
 	mazeGen = true;
@@ -162,12 +163,38 @@ void Pathfinder::mazeCopy(const int maze1[][Y_SIZE][Z_SIZE], int maze2[][Y_SIZE]
 */
 vector<string> Pathfinder::solveMaze() {
 	path.clear();
-	if(!findPath(maze, 0, 0, 0)) {
+	int tempMaze[X_SIZE][Y_SIZE][Z_SIZE];
+	mazeCopy(maze, tempMaze):
+	if(!findPath(tempMaze, 0, 0, 0)) {
 		path.clear();
 	}
 	return path;
 }
 //-----------------------------------------------------------------------------------------
-bool Pathfinder::findPath(int maze[X_SIZE][Y_SIZE][Z_SIZE], int x, int y, int z) {
-
+bool Pathfinder::findPath(int tMaze[][Y_SIZE][Z_SIZE], int x, int y, int z) {
+	//cell out of bounds or not usable
+	if(x < 0 || y < 0 || z < 0 || x >= X_SIZE || y >= Y_SIZE || z >= Z_SIZE || tMaze[x][y][z] != OPEN) {
+		return false;
+	}
+	else if (x == X_SIZE-1 && y == Y_SIZE-1 && z == Z_SIZE-1) {
+		tMaze[x][y][z] = PATH;
+		path.push_back("(" + to_string(x) + ", " + to_string(y) + ", " + to_string(z) + ")");
+		return true;
+	}
+	else {
+		tMaze[x][y][z] = PATH;
+		if (findPath(tMaze, x - 1, y, z)
+	        || findPath(tMaze, x + 1, y, z)
+	        || findPath(tMaze, x, y - 1, z)
+	        || findPath(tMaze, x, y + 1, z)
+			|| findPath(tMaze, x, y, z - 1)
+			|| findPath(tMaze, x, y, z + 1) ) {
+	      	path.push_back("(" + to_string(x) + ", " + to_string(y) + ", " + to_string(z) + ")");
+	      	return true;
+	    }
+	    else {
+	      	tMaze[x][y][z] = USED;  // Dead end.
+	      	return false;
+	    }
+	}
 }
